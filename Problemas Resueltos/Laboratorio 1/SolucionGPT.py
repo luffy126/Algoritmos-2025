@@ -1,5 +1,3 @@
-import math
-
 # --- INGRESO DE DATOS ---
 cantidadReservas = int(input("Ingrese la cantidad de reservas a procesar (mínimo 1): "))
 while cantidadReservas < 1:
@@ -96,7 +94,8 @@ for i in range(1, cantidadReservas + 1):
         descuento = 0.05
 
     subtotalDescuento = subtotal * (1 - descuento)
-    mayorSubtotal = max(mayorSubtotal, subtotalDescuento)
+    if subtotalDescuento > mayorSubtotal:
+        mayorSubtotal = subtotalDescuento
 
     # Impuesto
     impuesto = subtotalDescuento * 0.17
