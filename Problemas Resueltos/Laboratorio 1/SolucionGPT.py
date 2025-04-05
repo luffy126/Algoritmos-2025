@@ -1,5 +1,3 @@
-import math
-
 # --- INGRESO DE DATOS ---
 cantidadReservas = int(input("Ingrese la cantidad de reservas a procesar (mínimo 1): "))
 while cantidadReservas < 1:
@@ -36,7 +34,13 @@ for i in range(1, cantidadReservas + 1):
         contadorSuite += 1
 
     # Número de huéspedes
-    capacidadHabitacion = 2 if tipo == 1 else (4 if tipo == 2 else 6)
+    if tipo == 1:
+        capacidadHabitacion = 2
+    elif tipo == 2:
+        capacidadHabitacion = 4
+    else:
+        capacidadHabitacion = 6
+        
     huespedes = int(input(f"Ingrese número de huéspedes (máx {capacidadHabitacion}): "))
     while huespedes <= 0 or huespedes > capacidadHabitacion:
         print("Cantidad inválida para esta habitación.")
@@ -46,7 +50,7 @@ for i in range(1, cantidadReservas + 1):
     serviciosSolicitados = {'EP': 0, 'CS': 0, 'DB': 0, 'SPA': 0}
     totalServicios = 0
 
-    for servicio in serviciosSolicitados.keys():
+    for servicio in serviciosSolicitados:
         valor = int(input(f"¿Desea {servicio}? (1=Sí, 0=No): "))
         while valor not in [0, 1]:
             print("Debe ingresar 0 o 1.")
@@ -62,19 +66,25 @@ for i in range(1, cantidadReservas + 1):
         propinaPorcentaje = int(input("Ingrese porcentaje de propina (%): "))
 
     # --- CÁLCULOS ---
-    precioHabitacion = 45000 if tipo == 1 else (80000 if tipo == 2 else 120000)
+    if tipo == 1:
+        precioHabitacion = 45000
+    elif tipo == 2:
+        precioHabitacion = 80000
+    else:
+        precioHabitacion = 120000
+        
     subtotal = noches * precioHabitacion
 
     # Servicios por habitación
-    if serviciosSolicitados['EP']:
+    if serviciosSolicitados['EP'] == 1:
         subtotal += noches * 5000
-    if serviciosSolicitados['CS']:
+    if serviciosSolicitados['CS'] == 1:
         subtotal += noches * 3000
 
     # Servicios por persona
-    if serviciosSolicitados['DB']:
+    if serviciosSolicitados['DB'] == 1:
         subtotal += noches * huespedes * 8000
-    if serviciosSolicitados['SPA']:
+    if serviciosSolicitados['SPA'] == 1:
         subtotal += noches * huespedes * 12000
 
     # Guardar para estadísticas
@@ -96,7 +106,8 @@ for i in range(1, cantidadReservas + 1):
         descuento = 0.05
 
     subtotalDescuento = subtotal * (1 - descuento)
-    mayorSubtotal = max(mayorSubtotal, subtotalDescuento)
+    if subtotalDescuento > mayorSubtotal:
+        mayorSubtotal = subtotalDescuento
 
     # Impuesto
     impuesto = subtotalDescuento * 0.17
@@ -108,7 +119,13 @@ for i in range(1, cantidadReservas + 1):
     totalFinal = round(subtotalDescuento + impuesto + propina)
 
     # Estadística Top
-    categoria = "Basica" if totalServicios == 0 else ("Clasica" if totalServicios == 1 else "Top")
+    if totalServicios == 0:
+        categoria = "Basica"
+    elif totalServicios == 1:
+        categoria = "Clasica"
+    else:
+        categoria = "Top"
+        
     if categoria == "Top":
         contadorTop += 1
 
@@ -116,7 +133,7 @@ for i in range(1, cantidadReservas + 1):
     if tipo == 3:
         contadorPremiumMensaje += 1
 
-    if totalFinal >= 1_000_000:
+    if totalFinal >= 1000000:
         contadorMayorMillon += 1
 
     print(f"Subtotal con descuento: ${round(subtotalDescuento)}")
