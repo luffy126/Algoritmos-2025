@@ -40,7 +40,7 @@ def leerServicios():
 
 def leerPorcentajePropina():
     porcentajePropina = int(input("Ingrese el porcentaje de propina: "))
-    mientras porcentajePropina < 0:
+    while porcentajePropina < 0:
         print("El porcentaje de propina debe ser al menos 0.")
         porcentajePropina = int(input("Ingrese el porcentaje de propina: "))
     return porcentajePropina
@@ -88,3 +88,26 @@ def imprimirEstadisticas(reservasSuite, reservasSinServicios, reservasConServici
     print(f"Subtotal más alto: ${round(subtotalMasAlto, 0)}")
     print(f"Número de reservas en habitación Premium con mensaje de bienvenida: {reservasPremiumConMensaje}")
     print(f"Número de reservas con un costo total de al menos $1,000,000: {reservasCostosas}")
+
+tarifasHabitacion = {1: 100, 2: 200, 3: 300}
+serviciosAdicionalesHabitacion = {'EP': 50, 'CS': 100, 'DB': 150, 'SPA': 200}
+serviciosAdicionalesPersona = {'EP': 10, 'CS': 20, 'DB': 30, 'SPA': 40}
+descuentos = [(5, 0.1), (10, 0.2)]
+tasasImpuesto = {1: 0.19, 2: 0.19, 3: 0.19}
+
+cantidadReservas = leerNumeroReservas()
+    for i in range(cantidadReservas):
+        noches = leerNumeroNoches()
+        tipoHabitacion = leerTipoHabitacion()
+        huespedes = leerNumeroHuespedes(tarifasHabitacion[tipoHabitacion])
+        servicios = leerServicios()
+        porcentajePropina = leerPorcentajePropina()
+
+        subtotal = calcularCostoBase(tipoHabitacion, noches, tarifasHabitacion)
+        costoServicios = calcularCostoServicios(servicios, noches, huespedes, serviciosAdicionalesHabitacion, serviciosAdicionalesPersona)
+        subtotal += costoServicios
+        subtotal = aplicarDescuento(subtotal, noches, descuentos)
+        impuesto = calcularImpuesto(subtotal, tipoHabitacion, tasasImpuesto)
+        costoTotal = calcularCostoTotal(subtotal, impuesto, porcentajePropina)
+        
+        imprimirResultados(subtotal, impuesto, costoTotal)
