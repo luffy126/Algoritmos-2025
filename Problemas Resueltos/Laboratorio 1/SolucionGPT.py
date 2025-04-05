@@ -1,4 +1,3 @@
-# Solucion desarrollada con ChatGPT y Copilot.
 import math
 
 # --- INGRESO DE DATOS ---
@@ -26,7 +25,7 @@ for i in range(1, cantidadReservas + 1):
     while noches <= 0:
         print("Debe ser mayor a 0.")
         noches = int(input("Ingrese la cantidad de noches: "))
-
+    
     # Tipo de habitación
     tipo = int(input("Tipo de habitación (1=Estándar, 2=Suite, 3=Premium): "))
     while tipo not in [1, 2, 3]:
@@ -44,15 +43,15 @@ for i in range(1, cantidadReservas + 1):
         huespedes = int(input(f"Ingrese número de huéspedes (máx {capacidadHabitacion}): "))
 
     # Servicios adicionales
-    serviciosSolicitados = {}
+    serviciosSolicitados = {'EP': 0, 'CS': 0, 'DB': 0, 'SPA': 0}
     totalServicios = 0
 
-    for s in ['EP', 'CS', 'DB', 'SPA']:
-        valor = int(input(f"¿Desea {s}? (1=Sí, 0=No): "))
+    for servicio in serviciosSolicitados.keys():
+        valor = int(input(f"¿Desea {servicio}? (1=Sí, 0=No): "))
         while valor not in [0, 1]:
             print("Debe ingresar 0 o 1.")
-            valor = int(input(f"¿Desea {s}? (1=Sí, 0=No): "))
-        serviciosSolicitados[s] = valor
+            valor = int(input(f"¿Desea {servicio}? (1=Sí, 0=No): "))
+        serviciosSolicitados[servicio] = valor
         if valor == 1:
             totalServicios += 1
 
@@ -67,14 +66,16 @@ for i in range(1, cantidadReservas + 1):
     subtotal = noches * precioHabitacion
 
     # Servicios por habitación
-    for s in ['EP', 'CS']:
-        if serviciosSolicitados[s]:
-            subtotal += noches * (5000 if s == 'EP' else 3000)
+    if serviciosSolicitados['EP']:
+        subtotal += noches * 5000
+    if serviciosSolicitados['CS']:
+        subtotal += noches * 3000
 
     # Servicios por persona
-    for s in ['DB', 'SPA']:
-        if serviciosSolicitados[s]:
-            subtotal += noches * huespedes * (8000 if s == 'DB' else 12000)
+    if serviciosSolicitados['DB']:
+        subtotal += noches * huespedes * 8000
+    if serviciosSolicitados['SPA']:
+        subtotal += noches * huespedes * 12000
 
     # Guardar para estadísticas
     if totalServicios == 0:
