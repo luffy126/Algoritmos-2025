@@ -1,41 +1,5 @@
-# Solucion desarrollada exclusivamente por ChatGPT.
-
+# Solucion desarrollada con ChatGPT y Copilot.
 import math
-
-# --- CONSTANTES ---
-PRECIOS_HABITACION = {1: 45000, 2: 80000, 3: 120000}
-CAPACIDAD_HABITACION = {1: 2, 2: 4, 3: 6}
-IMPUESTO_HABITACION = {1: 0.17, 2: 0.17, 3: 0.17}
-
-# Servicios por habitación (precio por noche)
-SERVICIOS_HABITACION = {
-    'EP': 5000,
-    'CS': 3000
-}
-
-# Servicios por persona (precio por persona por noche)
-SERVICIOS_PERSONA = {
-    'DB': 8000,
-    'SPA': 12000
-}
-
-# Descuentos por cantidad de noches
-DESCUENTOS_NOCHES = [
-    (15, 0.15),
-    (8, 0.10),
-    (4, 0.05),
-    (1, 0.0)
-]
-
-# Categorías por cantidad de servicios adicionales
-def obtener_categoria(servicios_totales):
-    if servicios_totales == 0:
-        return "Básica"
-    elif servicios_totales == 1:
-        return "Clásica"
-    else:
-        return "Top"
-
 # --- INGRESO DE DATOS ---
 while True:
     try:
@@ -47,7 +11,7 @@ while True:
     except ValueError:
         print("Entrada inválida. Debe ser un número entero.")
 
-# --- VARIABLES ESTADÍSTICAS ---
+# --- VARIABLES ---
 contador_suite = 0
 contador_sin_servicios = 0
 contador_con_servicio = 0
@@ -89,8 +53,9 @@ for i in range(1, cantidad_reservas + 1):
     # Número de huéspedes
     while True:
         try:
-            huespedes = int(input(f"Ingrese número de huéspedes (máx {CAPACIDAD_HABITACION[tipo]}): "))
-            if 0 < huespedes <= CAPACIDAD_HABITACION[tipo]:
+            capacidad_habitacion = 2 if tipo == 1 else (4 if tipo == 2 else 6)
+            huespedes = int(input(f"Ingrese número de huéspedes (máx {capacidad_habitacion}): "))
+            if 0 < huespedes <= capacidad_habitacion:
                 break
             else:
                 print("Cantidad inválida para esta habitación.")
@@ -127,17 +92,18 @@ for i in range(1, cantidad_reservas + 1):
             print("Entrada inválida.")
 
     # --- CÁLCULOS ---
-    subtotal = noches * PRECIOS_HABITACION[tipo]
+    precio_habitacion = 45000 if tipo == 1 else (80000 if tipo == 2 else 120000)
+    subtotal = noches * precio_habitacion
 
     # Servicios por habitación
     for s in ['EP', 'CS']:
         if servicios_solicitados[s]:
-            subtotal += noches * SERVICIOS_HABITACION[s]
+            subtotal += noches * (5000 if s == 'EP' else 3000)
 
     # Servicios por persona
     for s in ['DB', 'SPA']:
         if servicios_solicitados[s]:
-            subtotal += noches * huespedes * SERVICIOS_PERSONA[s]
+            subtotal += noches * huespedes * (8000 if s == 'DB' else 12000)
 
     # Guardar para estadísticas
     if total_servicios == 0:
@@ -150,16 +116,18 @@ for i in range(1, cantidad_reservas + 1):
 
     # Descuento por noches
     descuento = 0
-    for rango, porc in DESCUENTOS_NOCHES:
-        if noches >= rango:
-            descuento = porc
-            break
+    if noches >= 15:
+        descuento = 0.15
+    elif noches >= 8:
+        descuento = 0.10
+    elif noches >= 4:
+        descuento = 0.05
 
     subtotal_descuento = subtotal * (1 - descuento)
     mayor_subtotal = max(mayor_subtotal, subtotal_descuento)
 
     # Impuesto
-    impuesto = subtotal_descuento * IMPUESTO_HABITACION[tipo]
+    impuesto = subtotal_descuento * 0.17
 
     # Propina
     propina = subtotal_descuento * (propina_porcentaje / 100)
@@ -168,7 +136,7 @@ for i in range(1, cantidad_reservas + 1):
     total_final = round(subtotal_descuento + impuesto + propina)
 
     # Estadística Top
-    categoria = obtener_categoria(total_servicios)
+    categoria = "Básica" if total_servicios == 0 else ("Clásica" if total_servicios == 1 else "Top")
     if categoria == "Top":
         contador_top += 1
 
