@@ -20,6 +20,8 @@ cantidadNochesCatTop = 0
 contadorHabTop = 0
 contadorHabMillonPesos = 0
 
+### --- PROCESAMIENTO DE RESERVAS ---
+
 for i in range(1, cantidadReservas + 1):
     print (f"\n--- Reserva #{i} ---")
     cantidadNochesReservadas = int(input("Ingrese la cantidad de noches reservadas: "))
@@ -46,7 +48,7 @@ for i in range(1, cantidadReservas + 1):
             print("La cantidad de huéspedes debe ser entre 1 y 6.")
             cantidadHuespedes = int(input("Ingrese la cantidad de huéspedes: "))
 
-    ## servicios adicionales
+    ## Servicios adicionales
 
     ep = int(input("¿Desea el servicio de EP? (1=Sí, 0=No): "))
     while ep != 0 and ep != 1:
@@ -71,7 +73,7 @@ for i in range(1, cantidadReservas + 1):
         print("Debe ingresar 0 o 1.")
         spa = int(input("¿Desea el servicio de SPA? (1=Sí, 0=No): "))
 
-    ## propina
+    ## Propina
     propina = int(input("Ingrese el porcentaje de propina: "))
     
     ## calculo SUBtotal
@@ -81,7 +83,7 @@ for i in range(1, cantidadReservas + 1):
 
     precioSubTotal = 0
 
-    ## calculo del precio base de la habitación
+    ## Calculo del precio base de la habitación
 
     if tipoHabitacion == 1:
         precioSubTotal += 45000 * cantidadNochesReservadas
@@ -90,7 +92,7 @@ for i in range(1, cantidadReservas + 1):
     elif tipoHabitacion == 3:
         precioSubTotal += 120000 * cantidadNochesReservadas
 
-    ## calculo de los servicios adicionales
+    ## Calculo de los servicios adicionales
 
     if ep == 1:
         precioSubTotal += 5000 * cantidadNochesReservadas
@@ -101,7 +103,7 @@ for i in range(1, cantidadReservas + 1):
     if spa == 1:
         precioSubTotal += 12000 * cantidadNochesReservadas * cantidadHuespedes
 
-    ## descuento por cantidad de noches
+    ## Descuento por cantidad de noches
 
     montoDescontado = 0
 
@@ -118,7 +120,7 @@ for i in range(1, cantidadReservas + 1):
 
     precioSubtotalConDescuento = precioSubTotal - montoDescontado
 
-    ## suma de propina e impuesto
+    ## Suma de propina e impuesto
 
     precioFinal = precioSubtotalConDescuento
     precioFinal += precioSubtotalConDescuento * (propina / 100) ## propina
@@ -131,7 +133,7 @@ for i in range(1, cantidadReservas + 1):
     if precioFinal > 1000000:
         contadorHabMillonPesos += 1
 
-    ## categoria de la reserva
+    ## Categoria de la reserva
     categoriaReserva = 0
 
     cantidadServiciosAdicionales = ep + cs + db + spa
@@ -148,6 +150,8 @@ for i in range(1, cantidadReservas + 1):
         contadorHabTop += 1
         cantidadNochesCatTop += cantidadNochesReservadas
 
+## --- CALCULOS FINALES ---
+
 porcentajeCantidadSuite = round((contadorHabSuite / cantidadReservas) * 100)
 print(f"Porcentaje de habitaciones Suite: {porcentajeCantidadSuite: }%")
 
@@ -160,7 +164,6 @@ if contadorHabEstandar > 0:
     print(f"Porcentaje de habitaciones estándar con desayuno: {porcentajeHabEstandar: }%")
 else:
     print("No se registraron habitaciones estándar.")
-## Cantidad de reservas de categoría estandar
 
 ## Promedio pagado por categoría básica
 if contadorCategoriaBasica > 0:
